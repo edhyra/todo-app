@@ -1,0 +1,36 @@
+# Ignore build outputs
+/TodoManagementApp/bin/
+/TodoManagementApp/obj/
+**/bin/
+**/obj/
+
+# Visual Studio / IDE
+.vs/
+.vscode/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# OS files
+Thumbs.db
+Desktop.ini
+ehthumbs.db
+
+# MongoDB data (don't commit DB files)
+/mongo/data/
+/mongo/journal/
+/mongo/WiredTiger*
+
+# Publish output
+/publish/
+
+# NuGet packages
+packages/
+*.nupkg
+
+# Logs, temporary files
+*.log
+TestResults/
+
+# Do not ignore Config/appsettings.json (kept intentionally)
