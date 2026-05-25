@@ -1,0 +1,36 @@
+@startuml
+' Controllers layer - Presentation.Controllers
+skinparam classAttributeIconSize 0
+
+class ManagerController {
+    - _employeeService : EmployeeService
+    - _todoService : TodoService
+    + AddEmployee(managerObjectId : string, name : string, employeeId : string) : (Employee employee, string accessCode)
+    + GetEmployees(managerObjectId : string) : List<Employee>
+    + GetEmployeeById(id : string) : Employee?
+    + GetTodosByManager(managerObjectId : string) : List<TodoTask>
+    + GetTodosByEmployee(employeeObjectId : string) : List<TodoTask>
+    + CreateTodoForEmployees(managerObjectId : string, employeeObjectIds : IEnumerable<string>, content : string) : void
+    + CancelTodo(todoId : string) : void
+    + TerminateEmployee(employeeObjectId : string) : void
+}
+
+class EmployeeController {
+    - _todoService : TodoService
+    + GetTodos(employeeObjectId : string) : List<TodoTask>
+    + UpdateTodoStatus(todoId : string, newStatus : TodoStatus) : void
+    + GetTodoById(todoId : string) : TodoTask?
+}
+
+class AuthController {
+    - _authService : AuthService
+    + Login(employeeId : string, accessCode : string) : bool
+    + RequestAccessCode(managerId : string, employeeId : string) : void
+}
+
+ManagerController --> EmployeeService : uses
+ManagerController --> TodoService : uses
+EmployeeController --> TodoService : uses
+AuthController --> AuthService : uses
+
+@enduml

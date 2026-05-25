@@ -1,0 +1,62 @@
+@startuml
+' Services layer - Business.Services
+skinparam classAttributeIconSize 0
+
+interface IEmployeeService {
+    + AddEmployee(managerObjectId : string, name : string, employeeId : string) : (Employee employee, string accessCode)
+    + GetEmployeesForManager(managerObjectId : string) : List<Employee>
+    + GetById(id : string) : Employee?
+    + TerminateEmployee(employeeObjectId : string) : void
+}
+
+class EmployeeService {
+    - _employeeRepo : IEmployeeRepository
+    + EmployeeService(employeeRepo : IEmployeeRepository? = null)
+    + AddEmployee(managerObjectId : string, name : string, employeeId : string) : (Employee employee, string accessCode)
+    + GetEmployeesForManager(managerObjectId : string) : List<Employee>
+    + GetById(id : string) : Employee?
+    + TerminateEmployee(employeeObjectId : string) : void
+}
+
+interface ITodoService {
+    + CreateTodoForEmployees(managerObjectId : string, employeeObjectIds : IEnumerable<string>, content : string) : void
+    + GetTodosByEmployee(employeeObjectId : string) : List<TodoTask>
+    + GetTodosByManager(managerObjectId : string) : List<TodoTask>
+    + GetTodoById(todoId : string) : TodoTask?
+    + CancelTodo(todoId : string) : void
+    + UpdateTodoStatus(todoId : string, newStatus : TodoStatus) : void
+}
+
+class TodoService {
+    - _todoRepo : ITodoRepository
+    - _employeeRepo : IEmployeeRepository
+    + TodoService(todoRepo : ITodoRepository? = null, employeeRepo : IEmployeeRepository? = null)
+    + CreateTodoForEmployees(managerObjectId : string, employeeObjectIds : IEnumerable<string>, content : string) : void
+    + GetTodosByEmployee(employeeObjectId : string) : List<TodoTask>
+    + GetTodosByManager(managerObjectId : string) : List<TodoTask>
+    + GetTodoById(todoId : string) : TodoTask?
+    + CancelTodo(todoId : string) : void
+    + UpdateTodoStatus(todoId : string, newStatus : TodoStatus) : void
+}
+
+interface IAuthService {
+     Authenticate(employeeId : string, accessCode : string) : bool
+}
+
+class AuthService {
+    - _employeeRepo : IEmployeeRepository
+    + AuthService(employeeRepo : IEmployeeRepository? = null)
+    + Authenticate(employeeId : string, accessCode : string) : bool
+}
+
+IEmployeeService <|.. EmployeeService
+ITodoService <|.. TodoService
+IAuthService <|.. AuthService
+
+EmployeeService --> EmployeeRepository : uses
+TodoService --> TodoRepository : uses
+TodoService --> EmployeeRepository : uses
+TodoService --> ManagerRepository : uses
+AuthService --> EmployeeRepository : uses
+
+@enduml

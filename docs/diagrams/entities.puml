@@ -1,0 +1,48 @@
+@startuml
+' Domain Entities - Class Diagram
+skinparam classAttributeIconSize 0
+
+left to right direction
+
+class Manager {
+    + Id : ObjectId
+    + Name : string
+    + EmployeeId : string
+    + AccessCodeHash : string
+    + CreatedAt : DateTime
+}
+
+class Employee {
+    + Id : ObjectId
+    + Name : string
+    + EmployeeId : string
+    + AccessCodeHash : string
+    + Active : bool
+    + ManagerId : ObjectId
+    + CreatedAt : DateTime
+}
+
+class TodoTask {
+    + Id : ObjectId
+    + Content : string
+    + ManagerId : ObjectId
+    + EmployeeId : ObjectId
+    + Status : TodoStatus
+    + CreatedAt : DateTime
+}
+
+enum TodoStatus {
+    Active
+    InProgress
+    Done
+    Cancelled
+}
+
+' Relationships
+Manager "1" -- "0..*" Employee : manages
+Manager "1" -- "0..*" TodoTask : assigns
+Employee "1" -- "0..*" TodoTask : assigned to
+
+TodoTask ..> TodoStatus : uses
+
+@enduml

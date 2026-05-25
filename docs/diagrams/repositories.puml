@@ -1,0 +1,70 @@
+@startuml
+' Repositories layer - DataAccess.Repositories
+skinparam classAttributeIconSize 0
+
+interface IEmployeeRepository {
+    + GetByAccessCode(accessCode : string) : Employee?
+    + GetByEmployeeId(employeeId : string) : Employee
+    + GetById(id : string) : Employee
+    + GetByManagerId(managerId : string) : List<Employee>
+    + Insert(employee : Employee) : void
+    + Update(employee : Employee) : void
+}
+
+class EmployeeRepository {
+    - _col : IMongoCollection<Employee>
+    + EmployeeRepository()
+    + GetByAccessCode(accessCode : string) : Employee?
+    + GetByEmployeeId(employeeId : string) : Employee
+    + GetById(id : string) : Employee
+    + GetByManagerId(managerId : string) : List<Employee>
+    + Insert(employee : Employee) : void
+    + Update(employee : Employee) : void
+}
+
+interface ITodoRepository {
+    + Insert(todo : TodoTask) : void
+    + GetByEmployeeId(employeeId : string) : List<TodoTask>
+    + GetByManagerId(managerId : string) : List<TodoTask>
+    + GetById(id : string) : TodoTask?
+    + Update(todo : TodoTask) : void
+}
+
+class TodoRepository {
+    - _col : IMongoCollection<TodoTask>
+    + TodoRepository()
+    + Insert(todo : TodoTask) : void
+    + GetByEmployeeId(employeeId : string) : List<TodoTask>
+    + GetByManagerId(managerId : string) : List<TodoTask>
+    + GetById(id : string) : TodoTask?
+    + Update(todo : TodoTask) : void
+}
+
+interface IManagerRepository {
+    + GetById(id : string) : Manager
+    + GetAll() : List<Manager>
+    + Insert(manager : Manager) : void
+    + Update(manager : Manager) : void
+}
+
+class ManagerRepository {
+    - _col : IMongoCollection<Manager>
+    + ManagerRepository()
+    + GetById(id : string) : Manager
+    + GetAll() : List<Manager>
+    + Insert(manager : Manager) : void
+    + Update(manager : Manager) : void
+}
+
+IEmployeeRepository <|.. EmployeeRepository
+ITodoRepository <|.. TodoRepository
+IManagerRepository <|.. ManagerRepository
+
+EmployeeRepository ..> MongoDbContext : uses
+TodoRepository ..> MongoDbContext : uses
+ManagerRepository ..> MongoDbContext : uses
+EmployeeRepository --> Employee : persists
+TodoRepository --> TodoTask : persists
+ManagerRepository --> Manager : persists
+
+@enduml

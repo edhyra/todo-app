@@ -1,0 +1,54 @@
+@startuml
+' Entity Relationship Diagram - Domain Entities
+skinparam linetype ortho
+skinparam classAttributeIconSize 0
+
+' Entities
+entity "Manager" as Manager {
+  * Id : ObjectId
+  --
+  Name : string
+  EmployeeId : string
+  AccessCodeHash : string
+  CreatedAt : DateTime
+}
+
+entity "Employee" as Employee {
+  * Id : ObjectId
+  --
+  Name : string
+  EmployeeId : string
+  AccessCodeHash : string
+  Active : bool
+  ManagerId : ObjectId
+  CreatedAt : DateTime
+}
+
+entity "TodoTask" as TodoTask {
+  * Id : ObjectId
+  --
+  Content : string
+  ManagerId : ObjectId
+  EmployeeId : ObjectId
+  Status : TodoStatus
+  CreatedAt : DateTime
+  UpdatedAt : DateTime?
+}
+
+' Relationships
+Manager ||--o{ Employee : "manages"
+Manager ||--o{ TodoTask : "creates/owns"
+Employee ||--o{ TodoTask : "assigned to"
+
+' Notes
+note right of Employee
+  - Each Employee references a Manager via `ManagerId`.
+  - `AccessCodeHash` stores the hashed access code.
+end note
+
+note left of TodoTask
+  - Each TodoTask references both Manager and Employee by ObjectId.
+  - `Status` uses `TodoStatus` enum (Active, InProgress, Done, Cancelled, Terminated).
+end note
+
+@enduml
